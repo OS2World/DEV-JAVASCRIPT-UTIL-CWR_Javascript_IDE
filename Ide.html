@@ -1,0 +1,294 @@
+<html>
+<head><title>CWR Javascript IDE</title>
+<script language="JavaScript">
+<!--
+
+function newCook(name, vall)
+{
+ var expires = new Date();
+ expires.setTime (expires.getTime() + 24 * 60 * 60 * 30 * 1000);
+ var expiryDate = expires.toGMTString();
+ document.cookie = name + "=" + vall + "; expires=" + expiryDate;
+}
+
+function newCookie(name,vall)
+{
+ var end = 0;
+ var start = 0;
+ var out="";
+ var tuss="";
+ while (start <= vall.length)
+ {
+  while ((vall.charAt(end) >= ' ') && (vall.charAt(end) != ';') && (end <= vall.length)) ++end; 
+  if (vall.charAt(end) == ';') tuss='®';
+  if (vall.charAt(end) < ' ') tuss='¯';
+//  while ((vall.charAt(end) < ' ') && (end < vall.length)) ++end;
+  out=out+vall.substring(start,end)+tuss;
+  tuss="";
+  ++end;
+  start = end;
+ }
+ newCook(name,out);
+}
+
+function saves()
+{
+ newCook('CWR Java IDE', 'cwr@home.nl');
+ newCookie('CWR_a',document.ide.a.value);
+ newCookie('CWR_b',document.ide.b.value);
+ newCookie('CWR_c',document.ide.c.value);
+ newCookie('CWR_d',document.ide.d.value);
+ newCookie('CWR_u',document.ide.u.value);
+ newCookie('CWR_y',document.ide.y.value);
+ newCookie('CWR_z',document.ide.z.value);
+ newCook('CWR_f1',document.ide.f1.value);
+ newCook('CWR_f2',document.ide.f2.value);
+ newCook('CWR_f3',document.ide.f3.value);
+ newCook('CWR_f4',document.ide.f4.value);
+}
+
+function getCook(name)
+{
+  var cookieFound = false;
+  var start = 0;
+  var end = 0;
+  var i = 0;
+  var cookieString = document.cookie;
+  // SCAN THE COOKIE FOR name
+  while (i <= cookieString.length)
+  {
+    start = i;
+    end = start + name.length;
+    if (cookieString.substring(start,end) == name)
+   {
+      cookieFound = true;
+      break;
+    }
+  ++i; 
+  }
+  // IS name FOUND?
+  if (cookieFound) {
+    start = end + 1;
+    end = document.cookie.indexOf(";",start);
+    if (end < start)
+      end = document.cookie.length;
+    return document.cookie.substring(start,end);
+  }
+  return "";
+}
+
+function getCookie(name)
+{
+ var end = 0;
+ var start = 0;
+ var vall="";
+ var out="";
+ var tuss="";
+ vall=getCook(name);
+ while (start <= vall.length)
+ {
+  while ((vall.charAt(end) != '®') && (vall.charAt(end) != '¯') && (end <= vall.length)) ++end; 
+  if (vall.charAt(end) == '®') tuss=';';
+  if (vall.charAt(end) == '¯') tuss='\n';
+  out=out+vall.substring(start,end)+tuss;
+  tuss="";
+  ++end;
+  start = end;
+ }
+ return out;
+}
+
+function loads()
+{
+ if ((document.cookie != "") && (document.cookie != null))
+ {
+  document.ide.a.value=getCookie("CWR_a");
+  document.ide.b.value=getCookie("CWR_b");
+  document.ide.c.value=getCookie("CWR_c");
+  document.ide.d.value=getCookie("CWR_d");
+  document.ide.u.value=getCookie("CWR_u");
+  document.ide.y.value=getCookie("CWR_y");
+  document.ide.z.value=getCookie("CWR_z");
+  document.ide.f1.value=getCook("CWR_f1");
+  document.ide.f2.value=getCook("CWR_f2");
+  document.ide.f3.value=getCook("CWR_f3");
+  document.ide.f4.value=getCook("CWR_f4");
+ }
+}
+
+function news()
+{
+ document.ide.a.value='';
+ document.ide.b.value='';
+ document.ide.c.value='';
+ document.ide.d.value='';
+ document.ide.u.value='';
+ document.ide.y.value='';
+ document.ide.z.value='';
+ document.ide.f1.value='';
+ document.ide.f2.value='';
+ document.ide.f3.value='';
+ document.ide.f4.value='';
+}
+
+function eqtest(text, out)
+{
+ var x = 0;
+ var l = 0;
+ var xx = 0;
+ var ll = 0;
+ if(txt.indexOf(')') != -1)
+ while(txt.indexOf(')', ll) != -1)
+ {
+  ll = (txt.indexOf(')', ll)) + 1;
+  xx++;
+ }
+ if(txt.indexOf('(') != -1)
+ while(txt.indexOf('(', l) != -1)
+  {
+  l = (txt.indexOf('(', l)) + 1;
+  x++;
+ }
+ if(x != xx) {alert('Your parentheses in ' + out + ' did not pass the equality test!'); }
+ x = 0;l = 0;xx=0;ll=0;
+ if(txt.indexOf('}') != -1)
+ while(txt.indexOf('}', ll) != -1)
+ {
+ ll = (txt.indexOf('}', ll)) + 1;
+ xx++;
+ }
+if(txt.indexOf('{') != -1)
+while(txt.indexOf('{', l) != -1)
+ {
+  l = (txt.indexOf('{', l)) + 1;
+  x++;
+ }
+ if(x != xx){alert("Your curly braces '{}' in " + out + " did not pass the equality test!");}
+}
+
+function idx(txt)
+{
+ return ((txt.indexOf('(') != -1) && (txt.indexOf(')') != -1));
+}
+
+function doit()
+{
+tf1=''; tf2=''; tf3=''; tf4='';
+if (idx(document.ide.f1.value)) tf1='function '+document.ide.f1.value+'\n{\n'+document.ide.a.value+'\n}\n';
+if (idx(document.ide.f2.value)) tf2='function '+document.ide.f2.value+'\n{\n'+document.ide.b.value+'\n}\n';
+if (idx(document.ide.f3.value)) tf3='function '+document.ide.f3.value+'\n{\n'+document.ide.c.value+'\n}\n';
+if (idx(document.ide.f4.value)) tf4='function '+document.ide.f4.value+'\n{\n'+document.ide.d.value+'\n}\n';
+ document.writeln('<html><head><script language="JavaScript">\n'+document.ide.y.value+'\n</script></head><body bgcolor="ffff99">\n'+document.ide.z.value+'\n<script language="JavaScript">\n'+document.ide.u.value+'\n'+tf1+tf2+tf3+tf4+'\n</script><br><hr><br><center><form><input type="button" onclick="history.go(-1);" value="Return"><br>\n</form></body></html>');
+}
+
+function source()
+{
+tf1=''; tf2=''; tf3=''; tf4='';
+if (idx(document.ide.f1.value)) tf1='function '+document.ide.f1.value+'\n{\n'+document.ide.a.value+'\n}\n';
+if (idx(document.ide.f2.value)) tf2='function '+document.ide.f2.value+'\n{\n'+document.ide.b.value+'\n}\n';
+if (idx(document.ide.f3.value)) tf3='function '+document.ide.f3.value+'\n{\n'+document.ide.c.value+'\n}\n';
+if (idx(document.ide.f4.value)) tf4='function '+document.ide.f4.value+'\n{\n'+document.ide.d.value+'\n}\n';
+ document.writeln('<html>\n<head>\n</head>\n<body bgcolor="ffff99">\n<center>\n<form>\n<textarea rows="25" cols="80"><html>\n<head>\n<script language="JavaScript">\n&lt;!--\n'+document.ide.y.value+'\n// --&gt;\n</script>\n</head>\n<body>\n'+document.ide.z.value+'\n<script language="JavaScript">\n&lt;!--\n'+document.ide.u.value+'\n'+tf1+tf2+tf3+tf4+'\n// --&gt;\n</script>\n</body>\n</html>\n</textarea><br>\n<center>\n<form>\n<input type="button" onclick="history.go(-1);" value="Return"><br>\n</form>\n</body>\n</html>');
+}
+
+function equality()
+{
+ txt= new String(document.ide.a.value);
+ eqtest(txt,'Function 1');
+ txt= new String(document.ide.b.value);
+ eqtest(txt,'Function 2');
+ txt= new String(document.ide.c.value);
+ eqtest(txt,'Function 3');
+ txt= new String(document.ide.d.value);
+ eqtest(txt,'Function 4');
+ txt= new String(document.ide.u.value);
+ eqtest(txt,'Body');
+ txt= new String(document.ide.y.value);
+ eqtest(txt,'Head');
+}
+
+function help()
+{
+var option = "toolbar=0,location=0,directories=0,status=0,menubar=0,scrollbars=0,resizable=0,width=420,height=430";
+  resWindow=window.open("", "Help", option);
+  resWindow.document.open();
+  resWindow.document.writeln("<html><head><title>Help</title></head>");
+  resWindow.document.writeln('<Body bgcolor="ffff99">\n');
+  resWindow.document.writeln('<center><br>');
+  resWindow.document.writeln('Type in or edit your code.<br>');
+  resWindow.document.writeln('Code for the header goes in the &lt;HEAD&gt; field.<br>');
+  resWindow.document.writeln('The body code in the &lt;BODY&gt; field.<br>');
+  resWindow.document.writeln('There are a few function fields also for the body.<br>');
+  resWindow.document.writeln('The &lt;HTML&gt; field is for html-code only, for testing.<br>');
+  resWindow.document.writeln('<br></center><tt>');
+  resWindow.document.writeln(' &nbsp;&nbsp;New&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - clears all.<br>');
+  resWindow.document.writeln(' &nbsp;&nbsp;Load&nbsp;&nbsp;&nbsp;&nbsp; - loads from saved cookie.<br>');
+  resWindow.document.writeln(' &nbsp;&nbsp;Save&nbsp;&nbsp;&nbsp;&nbsp; - save as cookie.<br>');
+  resWindow.document.writeln(' &nbsp;&nbsp;Equality - test for matching () and {}.<br>');
+  resWindow.document.writeln(' &nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - for running/testing your code.<br>');
+  resWindow.document.writeln(' &nbsp;&nbsp;Source&nbsp;&nbsp; - shows the source, for copy/paste.<br>');
+  resWindow.document.write('</tt><hr><center>\n<form>\n<input type="button" ');
+  resWindow.document.writeln('onclick="window.close();" value="Close">');
+  resWindow.document.writeln("<br></body></html>");
+  resWindow.document.close();
+  resWindow.focus();
+}
+
+// -->
+</script>
+
+</head>
+<Body BgColor="#ffff99">
+<BaseFont Size=3>
+<center>
+<form name="ide"><hr>
+<input type="button" value="    New  " onclick="news();">
+<input type="button" value="   Load  " onclick="loads();">
+<input type="button" value="   Save  " onclick="saves();">
+<input type="button" value="Equality" onclick="equality();">
+<input type="button" value="   Run   " onclick="doit();">
+<input type="button" value=" Source " onclick="source();">
+<input type="button" value="   Help   " onclick="help();">
+<hr><b>Code to be embedded in the &lt;Head&gt;</b><br>
+<textarea rows="20" cols="80" name="y">
+// CWR Javascript IDE
+</textarea><br>
+<hr><b>Code to be embedded in the &lt;Body&gt;</b><br>
+<textarea rows="20" cols="80" name="u">
+document.writeln("<center><b>CWR Javascript IDE</b></center><br>");
+</textarea><br>
+<hr><b>Function 1 </b><INPUT TYPE="TEXT" NAME="f1" SIZE=20 value="f1()"><br>
+<textarea rows="10" cols="80" name="a">
+alert("Function 1");
+</textarea><br>
+<hr><b>Function 2 </b><INPUT TYPE="TEXT" NAME="f2" SIZE=20 value="f2()"><br>
+<textarea rows="10" cols="80" name="b">
+alert("Function 2");
+</textarea><br>
+<hr><b>Function 3 </b><INPUT TYPE="TEXT" NAME="f3" SIZE=20 value="f3()"><br>
+<textarea rows="10" cols="80" name="c">
+alert("Function 3");
+</textarea><br>
+<hr><b>Function 4 </b><INPUT TYPE="TEXT" NAME="f4" SIZE=20 value="f4()"><br>
+<textarea rows="10" cols="80" name="d">
+alert("Function 4");
+</textarea><br>Additional functions may be placed in the Body javascript coding.<br>
+<hr><b>Pure HTML code</b><br>(DONT put an &lt;HTML&gt; tag!  This is for use with hrefs, images, forms and etc. only.)
+<textarea rows="20" cols="80" name="z">
+<center><form><br>
+<input type="button" onclick="f1();" value="Function 1">
+<input type="button" onclick="f2();" value="Function 2">
+<input type="button" onclick="f3();" value="Function 3">
+<input type="button" onclick="f4();" value="Function 4">
+</form></center><br>
+</textarea><br><hr>
+<input type="button" value="    New  " onclick="news();">
+<input type="button" value="   Load  " onclick="loads();">
+<input type="button" value="   Save  " onclick="saves();">
+<input type="button" value="Equality" onclick="equality();">
+<input type="button" value="   Run   " onclick="doit();">
+<input type="button" value=" Source " onclick="source();">
+<input type="button" value="   Help   " onclick="help();">
+<hr><br></form>
+</body>
+</html>
